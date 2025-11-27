@@ -24,7 +24,7 @@ export const signUp = {
     }
 
     try {
-      const resp = await client.signUp.email({ name, email, password });
+      const resp = await client.signUp.email({ name, email, password }) as any;
       if (resp?.error) {
         const textError =
           typeof resp.error === "string"
@@ -48,7 +48,7 @@ export const signUp = {
   },
   github: async () => {
     try {
-      const resp = await client.signIn.social({ provider: "github" });
+      const resp = await client.signIn.social({ provider: "github", callbackURL: "/chat" }) as any;
       if (resp?.error) {
         const textError =
           typeof resp.error === "string"
@@ -72,7 +72,7 @@ export const signUp = {
   },
   google: async () => {
     try {
-      const resp = await client.signIn.social({ provider: "google" });
+      const resp = await client.signIn.social({ provider: "google" }) as any;
       if (resp?.error) {
         const textError =
           typeof resp.error === "string"
@@ -108,7 +108,7 @@ export const signIn = {
     }
 
     try {
-      const resp = await client.signIn.email({ email, password });
+      const resp = await client.signIn.email({ email, password }) as any;
       if (resp?.error) {
         const textError =
           typeof resp.error === "string"
@@ -132,7 +132,7 @@ export const signIn = {
   },
   github: async () => {
     try {
-      const resp = await client.signIn.social({ provider: "github" });
+      const resp = await client.signIn.social({ provider: "github", callbackURL: "/chat" }) as any;
       if (resp?.error) {
         const textError =
           typeof resp.error === "string"
@@ -156,7 +156,7 @@ export const signIn = {
   },
   google: async () => {
     try {
-      const resp = await client.signIn.social({ provider: "google" });
+      const resp = await client.signIn.social({ provider: "google", callbackURL: "/chat" }) as any;
       if (resp?.error) {
         const textError =
           typeof resp.error === "string"

@@ -3,7 +3,8 @@ import { db } from "@/lib/lib";
 import { messages, conversations } from "@/lib/schema";
 import { streamText } from "ai";
 import { gemini } from "@/lib/ai-gemini";
-// import { bedrock } from "@/lib/ai-bedrock"; // Uncomment when using Bedrock
+import { bedrock } from "@/lib/ai-bedrock";
+import { perplexity } from "@/lib/ai-perplexity";
 import { eq, and } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getAuthSession, unauthorizedResponse } from "@/lib/auth-middleware";
@@ -16,11 +17,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    let { conversationId, message, title } = await req.json();
+    let { conversationId, message, title, model = "gemini" } = await req.json();
 
     if (!message) {
       return NextResponse.json(
         { error: "message is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate model
+    const validModels = ["gemini", "perplexity", "bedrock"];
+    if (!validModels.includes(model)) {
+      return NextResponse.json(
+        { error: "Invalid model selected" },
         { status: 400 }
       );
     }
@@ -73,8 +83,13 @@ export async function POST(req: Request) {
 
     if (isFirstMessage) {
       // Generate title using LLM
+      const titleModel = 
+        model === "gemini" ? gemini(process.env.GEMINI_MODEL!) :
+        model === "perplexity" ? perplexity(process.env.PERPLEXITY_MODEL!) :
+        bedrock(process.env.BEDROCK_MODEL_ID!);
+
       const titleGen = await streamText({
-        model: gemini(process.env.GEMINI_MODEL!),
+        model: titleModel,
         messages: [
           { 
             role: "system", 
@@ -104,10 +119,15 @@ export async function POST(req: Request) {
       content: m.content || "",
     }));
 
+    // Select AI model based on user choice
+    const selectedModel = 
+      model === "gemini" ? gemini(process.env.GEMINI_MODEL!) :
+      model === "perplexity" ? perplexity(process.env.PERPLEXITY_MODEL!) :
+      bedrock(process.env.BEDROCK_MODEL_ID!);
+
     // Call AI
     const response = await streamText({
-      model: gemini(process.env.GEMINI_MODEL!),
-      // model: bedrock(process.env.BEDROCK_MODEL_ID!), // Switch to Bedrock when ready
+      model: selectedModel,
       messages: formatted,
     });
 
