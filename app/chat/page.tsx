@@ -4,9 +4,8 @@ import { useRouter } from "next/navigation";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatBox from "@/components/ChatBox";
 import { Button } from "@/components/ui/button";
-import { showToast } from "@/lib/toastify"; // same helper used on login
+import { showToast } from "@/lib/toastify";
 
-// Custom SVG icons
 const MenuIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
     <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" />
@@ -15,7 +14,11 @@ const MenuIcon = ({ className = "w-6 h-6" }) => (
 
 const LogoutIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -36,26 +39,10 @@ export default function ChatPage() {
   const router = useRouter();
 
   function handleLogout() {
-    // clear local token if you use it
     localStorage.removeItem("token");
 
-    // use the same toast helper & style as login
-    showToast("success", "Signed out successfully!", {
-      // optional: small icon like login
-      icon: (
-        <div className="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center">
-          <svg
-            className="w-4 h-4 text-white"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.4"
-            viewBox="0 0 24 24"
-          >
-            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-      ),
-    });
+    // match showToast(type, message) signature
+    showToast("success", "Signed out successfully!");
 
     router.push("/auth/login");
   }

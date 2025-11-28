@@ -1,6 +1,7 @@
+"use client";
+
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -22,7 +23,7 @@ export const Node = ({ handles, className, ...props }: NodeProps) => (
   <Card
     className={cn(
       "node-container relative size-full h-auto w-sm gap-0 rounded-md p-0",
-      className
+      className,
     )}
     {...props}
   >
@@ -51,9 +52,12 @@ export const NodeDescription = (props: NodeDescriptionProps) => (
   <CardDescription {...props} />
 );
 
-export type NodeActionProps = ComponentProps<typeof CardAction>;
+// Use a div for actions instead of CardAction
+export type NodeActionProps = ComponentProps<"div">;
 
-export const NodeAction = (props: NodeActionProps) => <CardAction {...props} />;
+export const NodeAction = ({ className, ...props }: NodeActionProps) => (
+  <div className={cn("flex items-center gap-2 px-3 py-2", className)} {...props} />
+);
 
 export type NodeContentProps = ComponentProps<typeof CardContent>;
 

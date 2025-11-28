@@ -11,6 +11,13 @@ import {
   useContext,
 } from "react";
 
+// Extend ToolUIPart["state"] so we can safely use extra states
+type ConfirmationState =
+  | ToolUIPart["state"]
+  | "approval-requested"
+  | "approval-responded"
+  | "output-denied";
+
 type ToolUIPartApproval =
   | {
       id: string;
@@ -41,11 +48,11 @@ type ToolUIPartApproval =
 
 type ConfirmationContextValue = {
   approval: ToolUIPartApproval;
-  state: ToolUIPart["state"];
+  state: ConfirmationState;
 };
 
 const ConfirmationContext = createContext<ConfirmationContextValue | null>(
-  null
+  null,
 );
 
 const useConfirmation = () => {
@@ -60,7 +67,7 @@ const useConfirmation = () => {
 
 export type ConfirmationProps = ComponentProps<typeof Alert> & {
   approval?: ToolUIPartApproval;
-  state: ToolUIPart["state"];
+  state: ConfirmationState;
 };
 
 export const Confirmation = ({

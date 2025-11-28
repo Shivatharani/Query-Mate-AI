@@ -1,4 +1,3 @@
-api/auth/chat/route.ts
 
 
 // app/api/chat/route.ts

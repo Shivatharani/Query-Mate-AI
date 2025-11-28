@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -104,10 +103,15 @@ export const PlanDescription = ({
   );
 };
 
-export type PlanActionProps = ComponentProps<typeof CardAction>;
+// Use a div as action container instead of CardAction
+export type PlanActionProps = ComponentProps<"div">;
 
-export const PlanAction = (props: PlanActionProps) => (
-  <CardAction data-slot="plan-action" {...props} />
+export const PlanAction = ({ className, ...props }: PlanActionProps) => (
+  <div
+    className={cn("flex items-center gap-2 px-3 py-2", className)}
+    data-slot="plan-action"
+    {...props}
+  />
 );
 
 export type PlanContentProps = ComponentProps<typeof CardContent>;
