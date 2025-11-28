@@ -1,3 +1,6 @@
+api/auth/chat/route.ts
+
+
 // app/api/chat/route.ts
 import { db } from "@/lib/lib";
 import { messages, conversations } from "@/lib/schema";
@@ -93,7 +96,7 @@ export async function POST(req: Request) {
         messages: [
           { 
             role: "system", 
-            content: "Summarize the user's message into a short 3-5 word title. Output ONLY the title, no quotes or punctuation." 
+            content: "Summarize the user's message into a short 3 word title. Output ONLY 3 words, no quotes or punctuation." 
           },
           { role: "user", content: message }
         ]
@@ -104,8 +107,13 @@ export async function POST(req: Request) {
         generatedTitle += chunk;
       }
 
-      // Clean up the title
+      // Clean up the title and limit length
       generatedTitle = generatedTitle.replace(/['"]/g, "").trim();
+      
+      // Truncate title if it's too long (max 30 characters)
+      if (generatedTitle.length > 30) {
+        generatedTitle = generatedTitle.substring(0, 2) + "...";
+      }
 
       // Update conversation with generated title
       await db
