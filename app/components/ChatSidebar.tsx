@@ -104,7 +104,7 @@ export default function ChatSidebar({
           credentials: "include",
           body: JSON.stringify({ id, title: newTitle.trim() }),
         });
-        
+
         if (response.ok) {
           setChats((prev) =>
             prev.map((c) => (c.id === id ? { ...c, title: newTitle.trim() } : c)),
@@ -121,7 +121,7 @@ export default function ChatSidebar({
 
   const handleDelete = async (id: string) => {
     if (!id || !confirm("Delete this conversation and all its messages?")) return;
-    
+
     try {
       const response = await fetch("/api/conversations", {
         method: "DELETE",
@@ -129,7 +129,7 @@ export default function ChatSidebar({
         credentials: "include",
         body: JSON.stringify({ id }),
       });
-      
+
       if (response.ok) {
         setChats((prev) => prev.filter((c) => c.id !== id));
         setMessagesByConv((prev) => {
@@ -152,13 +152,13 @@ export default function ChatSidebar({
   return (
     <>
       <aside
-        className={`fixed z-30 left-0 top-0 h-full w-80 transition-all duration-300 ease-in-out shadow-2xl bg-white ${
+        className={`fixed z-30 left-0 top-0 h-full w-72 sm:w-80 transition-transform duration-300 ease-in-out shadow-2xl bg-white ${
           open ? "translate-x-0" : "-translate-x-80"
         }`}
       >
         <Button
           variant="ghost"
-          className="absolute top-4 right-4 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute top-3 right-3 rounded-full hover:bg-gray-100 transition-colors"
           onClick={() => setOpen(false)}
           aria-label="Close sidebar"
           size="icon"
@@ -166,49 +166,49 @@ export default function ChatSidebar({
           <X className="w-5 h-5 text-gray-600" />
         </Button>
 
-        {/* User circle + name + email */}
-        <div className="flex flex-col items-center py-8 border-b bg-gradient-to-b from-purple-50 to-white">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-2xl font-semibold shadow-lg mb-3">
+        {/* User info */}
+        <div className="flex flex-col items-center py-7 sm:py-8 border-b bg-gradient-to-b from-purple-50 to-white">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-white text-xl sm:text-2xl font-semibold shadow-lg mb-2 sm:mb-3">
             {initial}
           </div>
-          <div className="font-bold text-lg text-gray-900">
+          <div className="font-bold text-base sm:text-lg text-gray-900">
             {user?.name ?? "User"}
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs sm:text-sm text-gray-500">
             {user?.email ?? "email@example.com"}
           </div>
         </div>
 
         {/* New Chat + Search */}
-        <div className="flex flex-col px-4 pt-5 gap-3">
+        <div className="flex flex-col px-3 sm:px-4 pt-4 sm:pt-5 gap-3">
           <Button
             onClick={() => {
               setActiveId(null);
               onSelectConversation(null, "New Chat");
             }}
-            className="flex items-center gap-2 justify-center bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-700 hover:to-fuchsia-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 py-3 font-semibold"
+            className="flex items-center gap-2 justify-center bg-gradient-to-r from-purple-600 to-fuchsia-500 hover:from-purple-700 hover:to-fuchsia-600 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 py-2.5 sm:py-3 font-semibold text-sm sm:text-base"
           >
-            <PlusIcon className="w-5 h-5" /> New Chat
+            <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" /> New Chat
           </Button>
           <div className="flex items-center rounded-xl border-2 border-gray-200 px-3 py-2 focus-within:border-purple-400 transition-colors bg-gray-50 focus-within:bg-white">
-            <Search className="w-5 h-5 text-gray-400" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
             <Input
               type="text"
               placeholder="Search chats..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-1 outline-none bg-transparent text-sm border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="flex-1 px-2 sm:px-3 py-1 outline-none bg-transparent text-xs sm:text-sm border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         </div>
 
         {/* Conversations list */}
-        <nav className="flex-1 mt-4 mb-6 px-4">
-          <div className="mb-3 font-semibold text-xs tracking-wide text-gray-500 uppercase flex items-center gap-2">
-            <MessageSquare className="w-4 h-4" />
+        <nav className="flex-1 mt-3 sm:mt-4 mb-4 sm:mb-6 px-3 sm:px-4">
+          <div className="mb-2 sm:mb-3 font-semibold text-[11px] sm:text-xs tracking-wide text-gray-500 uppercase flex items-center gap-2">
+            <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Recent Conversations</span>
           </div>
-          <ScrollArea.Root className="h-[calc(100vh-320px)] w-full">
+          <ScrollArea.Root className="h-[calc(100vh-280px)] sm:h-[calc(100vh-320px)] w-full">
             <ScrollArea.Viewport className="w-full h-full py-1">
               <div className="flex flex-col gap-2 pr-1">
                 {filteredChats.length > 0 ? (
@@ -224,7 +224,7 @@ export default function ChatSidebar({
                         }`}
                       >
                         <button
-                          className="text-left flex-1 min-w-0 px-2 py-2 font-medium text-sm truncate text-gray-800"
+                          className="text-left flex-1 min-w-0 px-2 py-2 font-medium text-xs sm:text-sm truncate text-gray-800"
                           onClick={() => {
                             setActiveId(chat.id);
                             onSelectConversation(chat.id, chatTitle);
@@ -232,12 +232,12 @@ export default function ChatSidebar({
                           }}
                         >
                           <div className="flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500 flex-shrink-0" />
                             <span className="truncate">{chatTitle}</span>
                           </div>
                         </button>
 
-                        {/* Three-dots menu with Edit/Delete */}
+                        {/* Menu */}
                         <DropdownMenu.Root>
                           <DropdownMenu.Trigger asChild>
                             <button
@@ -246,22 +246,22 @@ export default function ChatSidebar({
                               onClick={(e) => e.stopPropagation()}
                               aria-label="Conversation options"
                             >
-                              <MoreVertical className="w-4 h-4 text-gray-600" />
+                              <MoreVertical className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-600" />
                             </button>
                           </DropdownMenu.Trigger>
                           <DropdownMenu.Content
                             side="right"
                             align="start"
-                            className="z-[99] bg-white border border-gray-200 rounded-md shadow-md text-sm min-w-[160px] py-1"
+                            className="z-[99] bg-white border border-gray-200 rounded-md shadow-md text-sm min-w-[150px] sm:min-w-[160px] py-1"
                           >
                             <DropdownMenu.Item
                               onSelect={(e) => {
                                 e.preventDefault();
                                 handleEdit(chat.id);
                               }}
-                              className="px-3 py-2 flex items-center gap-2 cursor-pointer hover:bg-gray-100 text-gray-700"
+                              className="px-3 py-2 flex items-center gap-2 cursor-pointer hover:bg-gray-100 text-gray-700 text-xs sm:text-sm"
                             >
-                              <Edit className="w-4 h-4" />
+                              <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                               <span>Edit</span>
                             </DropdownMenu.Item>
                             <DropdownMenu.Separator className="h-px bg-gray-200 my-1" />
@@ -270,9 +270,9 @@ export default function ChatSidebar({
                                 e.preventDefault();
                                 handleDelete(chat.id);
                               }}
-                              className="px-3 py-2 flex items-center gap-2 cursor-pointer hover:bg-red-50 text-red-600"
+                              className="px-3 py-2 flex items-center gap-2 cursor-pointer hover:bg-red-50 text-red-600 text-xs sm:text-sm"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                               <span>Delete</span>
                             </DropdownMenu.Item>
                           </DropdownMenu.Content>
@@ -281,10 +281,10 @@ export default function ChatSidebar({
                     );
                   })
                 ) : (
-                  <div className="text-gray-400 text-sm py-8 text-center">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                  <div className="text-gray-400 text-xs sm:text-sm py-6 sm:py-8 text-center">
+                    <MessageSquare className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 text-gray-300" />
                     <p>No conversations yet</p>
-                    <p className="text-xs mt-1">Start a new chat to begin</p>
+                    <p className="text-[11px] sm:text-xs mt-1">Start a new chat to begin</p>
                   </div>
                 )}
               </div>
